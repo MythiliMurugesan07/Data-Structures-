@@ -1,0 +1,44 @@
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+int compare(const void *a, const void *b) {
+    char *x = *(char **)a;
+    char *y = *(char **)b;
+
+    char xy[25], yx[25];
+    strcpy(xy, x);
+    strcat(xy, y);
+
+    strcpy(yx, y);
+    strcat(yx, x);
+
+    return strcmp(yx, xy);   // descending order
+}
+
+char* largestNumber(int* nums, int numsSize) {
+    char **arr = (char **)malloc(numsSize * sizeof(char *));
+
+    for (int i = 0; i < numsSize; i++) {
+        arr[i] = (char *)malloc(12 * sizeof(char));
+        sprintf(arr[i], "%d", nums[i]);
+    }
+
+    qsort(arr, numsSize, sizeof(char *), compare);
+
+    // Edge case: if highest number is 0
+    if (strcmp(arr[0], "0") == 0) {
+        char *res = (char *)malloc(2);
+        strcpy(res, "0");
+        return res;
+    }
+
+    char *result = (char *)malloc(10000);
+    result[0] = '\0';
+
+    for (int i = 0; i < numsSize; i++) {
+        strcat(result, arr[i]);
+    }
+
+    return result;
+}
